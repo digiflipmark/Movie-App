@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="home">Home</string>
+    <string name="watch_list">Watch list</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="home_screen_header">What do you want to watch?</string>
+</resources>
