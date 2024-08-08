@@ -1,7 +1,5 @@
 package com.finder.movieapp.core_feature.data.remote.dto
 
-import com.finder.movieapp.core_feature.domain.model.MovieModel
-
 data class Result(
     val adult: Boolean,
     val backdrop_path: String,
@@ -19,6 +17,3 @@ data class Result(
     val vote_count: Int
 )
 
-fun Result.toMovieModel(): MovieModel {
-    return MovieModel(id = id, coverPath = poster_path ?: "")
-}
