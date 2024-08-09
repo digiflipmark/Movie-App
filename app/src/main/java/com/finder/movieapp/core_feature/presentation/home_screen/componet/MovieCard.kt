@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,11 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.finder.movieapp.core_feature.data.remote.dto.Result
 import com.finder.movieapp.core_feature.presentation.util.ImageLoadingState
-import com.finder.movieapp.core_feature.presentation.util.ShimmerCard
+import com.finder.movieapp.core_feature.presentation.util.shimmerCard
 
 @Composable
 fun MovieCard(modifier: Modifier = Modifier, movieItem: Result, onClick: (Result) -> Unit) {
@@ -27,28 +30,43 @@ fun MovieCard(modifier: Modifier = Modifier, movieItem: Result, onClick: (Result
     var isImageLoadingState by remember {
         mutableStateOf(ImageLoadingState.LOADING)
     }
-
+    val showShimmer = remember { mutableStateOf(true) }
     val context = LocalContext.current
     val imageRequest =
         ImageRequest.Builder(context = context).data(movieItem.poster_path).crossfade(true).build()
 
-    Card(modifier = modifier.clickable { onClick(movieItem) }, shape = MaterialTheme.shapes.large) {
+    Card(
+        modifier = modifier.clickable { onClick(movieItem) },
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
 
-        AsyncImage(model = imageRequest,
-            contentDescription = "",
+        AsyncImage(
+            model = imageRequest,
+            contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .background(
+                    shimmerCard(
+                        targetValue = 1300f,
+                        showShimmer = showShimmer.value
+                    )
+                )
+                .fillMaxSize(),
             onLoading = {
                 isImageLoadingState = ImageLoadingState.LOADING
-            }, onSuccess = {
+            },
+            onSuccess = {
+                showShimmer.value = false
                 isImageLoadingState = ImageLoadingState.SUCCESS
-            }, onError = {
+            },
+            onError = {
+                showShimmer.value = false
                 isImageLoadingState = ImageLoadingState.ERROR
             }
         )
-        if (isImageLoadingState == ImageLoadingState.LOADING) {
-            ShimmerCard(targetValue = 2000f, modifier = Modifier.fillMaxSize())
-        }
+
         if (isImageLoadingState == ImageLoadingState.ERROR) {
             Spacer(
                 modifier = Modifier
