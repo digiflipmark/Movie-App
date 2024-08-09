@@ -1,8 +1,10 @@
 package com.finder.movieapp.core_feature.data.remote.dto
 
+import com.finder.movieapp.core_feature.domain.model.Movie
+
 data class Result(
     val adult: Boolean,
-    val backdrop_path: String,
+    val backdrop_path: String?,
     val genre_ids: List<Int>,
     val id: Int,
     val original_language: String,
@@ -16,4 +18,11 @@ data class Result(
     val vote_average: Double,
     val vote_count: Int
 )
+
+
+fun Result.toMovie(): Movie {
+    return Movie(
+        id, poster_path ?: ""
+    )
+}
 
