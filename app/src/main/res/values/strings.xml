@@ -5,4 +5,8 @@
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="home_screen_header">What do you want to watch?</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="popular">Popular</string>
 </resources>

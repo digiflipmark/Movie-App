@@ -12,15 +12,15 @@ interface MoviesApi {
         @Query("api_key") apikey: String = "ac42f35ab92085ed961dd5aa4bc8dce5",
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    ): MovieResponse
 
 
-    @GET("movie/now_playing")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apikey: String = "ac42f35ab92085ed961dd5aa4bc8dce5",
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    ): MovieResponse
 
 
     @GET("movie/top_rated")
@@ -28,7 +28,7 @@ interface MoviesApi {
         @Query("api_key") apikey: String = "ac42f35ab92085ed961dd5aa4bc8dce5",
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    ): MovieResponse
 
 
     @GET("movie/upcoming")
@@ -36,7 +36,7 @@ interface MoviesApi {
         @Query("api_key") apikey: String = "ac42f35ab92085ed961dd5aa4bc8dce5",
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    ): MovieResponse
 
 
     @GET("trending/movie/week")
@@ -44,7 +44,7 @@ interface MoviesApi {
         @Query("api_key") apikey: String = "ac42f35ab92085ed961dd5aa4bc8dce5",
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    ): MovieResponse
 
 
 }
