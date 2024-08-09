@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     init {
         viewModelScope.launch {
-            delay(3000)
+            delay(500)
             splashShowFlow.value = false
         }
     }
