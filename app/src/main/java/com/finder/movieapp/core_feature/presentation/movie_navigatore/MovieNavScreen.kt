@@ -15,11 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.finder.movieapp.R
+import com.finder.movieapp.core_feature.presentation.detais_screen.DetailScreen
 import com.finder.movieapp.core_feature.presentation.home_screen.HomeScreen
 import com.finder.movieapp.core_feature.presentation.movie_navigatore.components.MoviesBottomNavigation
 import com.finder.movieapp.core_feature.presentation.search_screen.SearchScreen
@@ -93,7 +96,9 @@ fun MovieNavScreen() {
 
             composable(route = MovieRoute.HomeScreen.route) {
 
-                HomeScreen()
+                HomeScreen(onItemClick = { movieId ->
+                    navController.navigate(MovieRoute.MovieDetailScreen.route + "/${movieId.id}")
+                })
             }
 
             composable(route = MovieRoute.SearchScreen.route) {
@@ -104,6 +109,18 @@ fun MovieNavScreen() {
             composable(route = MovieRoute.WatchListScreen.route) {
 
                 BookMarkScreen()
+            }
+
+
+            composable(
+                route = MovieRoute.MovieDetailScreen.route + "/{movieId}",
+                arguments = listOf(navArgument(name = "movieId") {
+                    type = NavType.IntType
+                    nullable = false
+                })
+            ) {
+
+                DetailScreen(navigateBackRequest = { navController.navigateUp() })
             }
 
         }
