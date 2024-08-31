@@ -105,7 +105,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel(), onItemClick: (Res
                         .padding(horizontal = 11.dp)
                 ) {
 
-                    Toast.makeText(localContext, it.title, Toast.LENGTH_SHORT).show()
+                    onItemClick(it)
                 }
 
             }

@@ -7,7 +7,7 @@ data class DetailsModel(
     val backdropPath: String,
     val posterPath: String,
     val releaseYear: Int,
-    val durationInMinutes: Int,
+    val durationInMinutes: Int?,
     val genre: String,
     val aboutMovie: String
 )

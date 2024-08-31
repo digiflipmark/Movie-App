@@ -74,6 +74,7 @@ dependencies {
     //Compose Navigation & Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    kapt ("androidx.hilt:hilt-compiler:1.0.0")
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -103,5 +104,6 @@ dependencies {
 
     //WorkManger
     implementation (libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
 
 }

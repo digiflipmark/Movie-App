@@ -22,9 +22,9 @@ class DetailsUseCase @Inject constructor(private val moviesRepository: MoviesRep
             emit(Resource.Loading)
             try {
                 val movie = moviesRepository.getMovieDetails(id).toDomain().correctImagePath()
-                val movies = movie.correctImagePath()
-                if (movies != null) {
-                    emit(Resource.Success(movies))
+
+                if (movie != null) {
+                    emit(Resource.Success(movie))
                 }
 
             } catch (e: HttpException) {

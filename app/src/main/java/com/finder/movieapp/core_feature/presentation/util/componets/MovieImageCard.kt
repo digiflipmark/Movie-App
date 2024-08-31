@@ -31,6 +31,7 @@ fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String, shapes: Shap
         .data(imageUrl).crossfade(200)
         .build()
 
+
     Card(
         modifier = modifier,
         shape = shapes,

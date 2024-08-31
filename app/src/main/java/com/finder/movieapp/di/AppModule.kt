@@ -2,7 +2,10 @@ package com.finder.movieapp.di
 
 import android.content.ContentValues
 import android.util.Log
+import com.finder.movieapp.core_feature.data.remote.ImageApi
 import com.finder.movieapp.core_feature.data.remote.MoviesApi
+import com.finder.movieapp.core_feature.presentation.util.Constants
+import com.finder.movieapp.core_feature.presentation.util.Constants.IMAGE_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +44,15 @@ class AppModule {
             .writeTimeout(10, TimeUnit.SECONDS).readTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor).build()
     }
+
+    @Provides
+    fun provideImageApi(
+        httpClient: OkHttpClient,
+    ): ImageApi = Retrofit.Builder()
+        .baseUrl(IMAGE_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(httpClient)
+        .build()
+        .create(ImageApi::class.java)
 
 }

@@ -5,6 +5,7 @@ import com.finder.movieapp.core_feature.domain.model.DetailsModel
 
 data class DetailState(
     val isLoading: Boolean = false,
+    val isSaved: Boolean = false,
     val error: String = "",
     val data: DetailsModel? = null,
     val castLoading: Boolean = false,

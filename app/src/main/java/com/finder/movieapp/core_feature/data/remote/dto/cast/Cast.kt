@@ -1,5 +1,6 @@
 package com.finder.movieapp.core_feature.data.remote.dto.cast
 
+import com.finder.movieapp.core_feature.data.remote.dto.review.correctImagePath
 import com.finder.movieapp.core_feature.domain.model.CastModel
 
 data class Cast(
@@ -18,5 +19,5 @@ data class Cast(
 )
 
 fun Cast.toDomain(): CastModel {
-    return CastModel(profile = profile_path ?: "", name = name ?: "N/A")
+    return CastModel(profile = profile_path.correctImagePath(), name = name ?: "N/A")
 }
