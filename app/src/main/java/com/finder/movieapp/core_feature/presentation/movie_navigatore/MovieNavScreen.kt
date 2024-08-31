@@ -1,29 +1,36 @@
 package com.finder.movieapp.core_feature.presentation.movie_navigatore
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.finder.movieapp.R
+import com.finder.movieapp.core_feature.presentation.detais_screen.DetailScreen
+import com.finder.movieapp.core_feature.presentation.detais_screen.DetailViewModel
 import com.finder.movieapp.core_feature.presentation.home_screen.HomeScreen
+import com.finder.movieapp.core_feature.presentation.image_viewer_screen.ImageScreen
 import com.finder.movieapp.core_feature.presentation.movie_navigatore.components.MoviesBottomNavigation
 import com.finder.movieapp.core_feature.presentation.search_screen.SearchScreen
-import com.finder.movieapp.core_feature.presentation.watchlist_screen.BookMarkScreen
+import com.finder.movieapp.core_feature.presentation.util.ImageType
+import com.finder.movieapp.core_feature.presentation.watchlist_screen.WatchListScreen
+import com.finder.movieapp.core_feature.presentation.watchlist_screen.WatchListViewModel
 import com.finder.movieapp.ui.theme.MovieAppTheme
 
 @Composable
@@ -60,7 +67,6 @@ fun MovieNavScreen() {
     }
 
 
-
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
         if (isBottomBarVisible) {
 
@@ -88,12 +94,15 @@ fun MovieNavScreen() {
         NavHost(
             modifier = Modifier.padding(bottom = bottomPadding),
             navController = navController,
-            startDestination = MovieRoute.HomeScreen.route
+            startDestination = MovieRoute.HomeScreen.route,
         ) {
 
             composable(route = MovieRoute.HomeScreen.route) {
 
-                HomeScreen()
+                HomeScreen(onItemClick = { movieId ->
+
+                    navController.navigate(MovieRoute.MovieDetailScreen.route + "/${movieId.id}")
+                })
             }
 
             composable(route = MovieRoute.SearchScreen.route) {
@@ -102,15 +111,64 @@ fun MovieNavScreen() {
             }
 
             composable(route = MovieRoute.WatchListScreen.route) {
-
-                BookMarkScreen()
+                val watchListViewModel: WatchListViewModel = hiltViewModel()
+                val state = watchListViewModel.watchList.collectAsState()
+                WatchListScreen(state.value, navigateUpBack = navController::navigateUp, onClick = {movieId->
+                    navController.navigate(MovieRoute.MovieDetailScreen.route + "/${movieId}")
+                })
             }
+
+            composable(
+                route = MovieRoute.MovieDetailScreen.route + "/{movieId}",
+                arguments = listOf(navArgument(name = "movieId") {
+                    type = NavType.IntType
+                    nullable = false
+                })
+
+            ) {
+                val detailViewModel: DetailViewModel = hiltViewModel()
+                val state = detailViewModel.detailState.collectAsState().value
+                val reviews = detailViewModel.reviewFlow.collectAsLazyPagingItems()
+                DetailScreen(
+                    navigateBackRequest = navController::navigateUp,
+                    state,
+                    reviews,
+                    onImageClick = { imagePath, type ->
+                        val imageExtension =
+                            imagePath?.removePrefix("https://image.tmdb.org/t/p/w500//")
+                        val ty = if (type == ImageType.POSTER) "Poster" else "Backdrop"
+                        if (imageExtension != imagePath && imageExtension != null) {
+
+                            navController.navigate(MovieRoute.ImageViewerScreen.route + "/${imageExtension}/${ty}") {
+                                restoreState = true
+                            }
+                        }
+                    }, onBookMarkClick = detailViewModel::insertDeleteMovie
+                )
+            }
+
+            composable(route = MovieRoute.ImageViewerScreen.route + "/{imageExtension}/{ty}") {
+                val imagePath = it.arguments?.getString("imageExtension") ?: ""
+                val type = it.arguments?.getString("ty")?.let {
+                    if (it == "Poster") {
+                        ImageType.POSTER
+                    } else {
+                        ImageType.BACKDROP
+                    }
+                }
+
+                ImageScreen(
+                    imagePath,
+                    type
+                )
+            }
+
 
         }
     })
 }
 
-private fun navigateToTab(navController: NavController, route: String) {
+private fun navigateToTab(navController: NavHostController, route: String) {
     navController.navigate(route) {
         navController.graph.startDestinationRoute?.let { screen_route ->
             popUpTo(screen_route) {
@@ -130,3 +188,8 @@ private fun Disp() {
         MovieNavScreen()
     }
 }
+
+data class ImageViewerNavigation(
+    val path: String,
+    val type: String,
+)

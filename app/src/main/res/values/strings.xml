@@ -10,4 +10,11 @@
     <string name="top_rated">Top Rated</string>
     <string name="popular">Popular</string>
     <string name="retry">Retry</string>
+    <string name="detail">Detail</string>
+    <string name="minutes">Minutes</string>
+    <string name="about_movie">About Movie</string>
+    <string name="review">Review</string>
+    <string name="cast">Cast</string>
+    <string name="no_movie_title">There is no movie yet!</string>
+    <string name="no_movie_description">"Find your movie by Type title, categories, years, etc "</string>
 </resources>

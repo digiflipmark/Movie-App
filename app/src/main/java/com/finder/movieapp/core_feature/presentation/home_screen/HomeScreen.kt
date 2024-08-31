@@ -42,7 +42,7 @@ import com.finder.movieapp.ui.theme.Gray600
 import com.finder.movieapp.ui.theme.MovieAppTheme
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel(), onItemClick: (Result) -> Unit) {
 
     val state = rememberLazyListState()
     val trendingMovies = homeViewModel.trendingMovies.collectAsLazyPagingItems()
@@ -74,7 +74,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
             Spacer(modifier = Modifier.height(20.dp))
 
             TrendingMovieSection(trending = trendingMovies, onClick = {
-
+                onItemClick(it)
             })
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -105,7 +105,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                         .padding(horizontal = 11.dp)
                 ) {
 
-                    Toast.makeText(localContext, it.title, Toast.LENGTH_SHORT).show()
+                    onItemClick(it)
                 }
 
             }

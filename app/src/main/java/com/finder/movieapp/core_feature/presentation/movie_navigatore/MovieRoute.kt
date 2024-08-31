@@ -6,4 +6,6 @@ sealed class MovieRoute(val route: String) {
     data object SearchScreen : MovieRoute("search_screen")
     data object WatchListScreen : MovieRoute("watch_list_screen")
     data object MovieDetailScreen : MovieRoute("movie_detail_screen")
+    data object ImageViewerScreen : MovieRoute("image_viewer_screen")
+
 }
